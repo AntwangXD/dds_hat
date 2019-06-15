@@ -1,0 +1,107 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP -5VA
+D 10 bit 75 MHz Complete Direct Digital Synthesizer, 2.3 V to 5.5 V, 20 mW, TSSOP-20
+K Direct Digital Synthesizer DDS
+F http://www.analog.com/static/imported-files/data_sheets/AD9834.pdf
+$ENDCMP
+#
+$CMP 74AHC1G04
+D Single NOT Gate, Low-Voltage CMOS
+K Single Gate NOT LVC CMOS
+F http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf
+$ENDCMP
+#
+$CMP 74AHC1GU04
+D 74AHC1G04, Single NOT Gate, Low-Voltage CMOS
+K Single Gate NOT LVC CMOS
+F http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf
+$ENDCMP
+#
+$CMP 74AHCT1G04
+D Single NOT Gate, Low-Voltage CMOS
+K Single Gate NOT LVC CMOS
+F http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf
+$ENDCMP
+#
+$CMP 74AHCT1GU04
+D 74AHCT1G04, Single NOT Gate, Low-Voltage CMOS
+K Single Gate NOT LVC CMOS
+F http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf
+$ENDCMP
+#
+$CMP 74AUC1G04
+D Single NOT Gate, Low-Voltage CMOS
+K Single Gate NOT LVC CMOS
+F http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf
+$ENDCMP
+#
+$CMP 74AUC1GU04
+D 74AUC1G04, Single NOT Gate, Low-Voltage CMOS
+K Single Gate NOT LVC CMOS
+F http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf
+$ENDCMP
+#
+$CMP 74AUP1G04
+D Single NOT Gate, Low-Voltage CMOS
+K Single Gate NOT LVC CMOS
+F http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf
+$ENDCMP
+#
+$CMP 74AUP1GU04
+D 74AUP1G04, Single NOT Gate, Low-Voltage CMOS
+K Single Gate NOT LVC CMOS
+F http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf
+$ENDCMP
+#
+$CMP 74LVC1G04
+D Single NOT Gate, Low-Voltage CMOS
+K Single Gate NOT LVC CMOS
+F http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf
+$ENDCMP
+#
+$CMP 74LVC1GU04
+D 74LVC1G04, Single NOT Gate, Low-Voltage CMOS
+K Single Gate NOT LVC CMOS
+F http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf
+$ENDCMP
+#
+$CMP AD9833BRMZ
+D 10 bit 75 MHz Complete Direct Digital Synthesizer, 2.3 V to 5.5 V, 20 mW, TSSOP-20
+K Direct Digital Synthesizer DDS
+F http://www.analog.com/static/imported-files/data_sheets/AD9834.pdf
+$ENDCMP
+#
+$CMP CAT24C32
+D I2C Serial EEPROM 32Kb
+K EEPROM Serial
+$ENDCMP
+#
+$CMP Hole_3mm_PTH
+D OX40 Raspberry Pi HAT Connector
+K RPI HAT
+$ENDCMP
+#
+$CMP IA503S
+D I2C Serial EEPROM 32Kb
+K EEPROM Serial
+$ENDCMP
+#
+$CMP IA505S
+D I2C Serial EEPROM 32Kb
+K EEPROM Serial
+$ENDCMP
+#
+$CMP MCP6S93
+D 10 bit 75 MHz Complete Direct Digital Synthesizer, 2.3 V to 5.5 V, 20 mW, TSSOP-20
+K Direct Digital Synthesizer DDS
+F http://www.analog.com/static/imported-files/data_sheets/AD9834.pdf
+$ENDCMP
+#
+$CMP S75005-50.000-X-15
+D HCMOS Clock Oscillator
+K Crystal Clock Oscillator
+F http://cdn-reichelt.de/documents/datenblatt/B400/XO91.pdf
+$ENDCMP
+#
+#End Doc Library

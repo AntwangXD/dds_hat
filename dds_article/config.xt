@@ -1,0 +1,5 @@
+lcd_rotate=2
+gpu_mem=64
+initramfs initramfs-linux.img followkernel
+dtoverlay=dds_hat
+

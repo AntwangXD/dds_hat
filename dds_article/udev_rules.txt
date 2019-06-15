@@ -1,0 +1,4 @@
+$ cat /etc/udev/rules.d/99-iio.rules 
+ACTION=="add", PROGRAM="/bin/sh -c 'chown -R alarm:alarm /sys/bus/iio/devices/iio\:device0/*'"
+ACTION=="add", PROGRAM="/bin/sh -c 'chown -R alarm:alarm /sys/bus/iio/devices/iio\:device1/*'"
+

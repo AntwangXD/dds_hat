@@ -1,0 +1,196 @@
+﻿@D: 
+A DDS-base Function Generator for the Raspberry Pi 
+
+@Bi:complete_instrument.png
+
+@T: 
+The Raspberry Pi provides an excellent basis for personalized instrumentation. With the addition of the 'official' touch display, a case and a custom add-on board or HAT, a humble Pi is transformed into a high performance function generator that can rival expensive commercial offerings.  
+ 
+@V:
+Modern laboratory instruments are a marvel of integration, combining, hardware, software and often mechanical components to produce versatile and highly functional units that bring real value to the engineers and technologists who use them. This article aims to show how such an instrument might be put together, combining some those elements to provide a low-cost and flexible function generator that can rival it's more expensive commercial cousins on price, and possibly beat them in terms of flexibility.
+
+A signal or function  generator is a versatile frequency source, able to output a signal at a required, adjustable frequency from DC up into the high RF region, depending on applcation, with a number of output waveshapes, and at an adjustable amplitute. Sophisticated instruments may also inclue frequency, phase or amplitude modulation, useful for testing radio transmitters and receivers. No engineer’s workbench is complete without such an instrument. Together with an oscilloscope, it allows an engineer to characterise the frequency and phase repsonse of an amplifier, to test and calibrate counters and frequecy meters, and replace built-in oscillators in devices under test or during development. A variable frequency and amplitude signal is often requred beyond the pure electronic: there are applications is mechanical and acoustic engineering, for example testing loudspeakers or driving vibration platforms, and a plethora of other electronically excited mechanical devices. In the field of medicine, variable frequency sources are use to test the response of the humman ear, as well as to drive ultrasound devices used in imaging. The list goes on and on... 
+
+Many of the commercially available instruments cost upwards of several hundred pounds. Because of their self-contained nature, it is not generally possible to modify their function, and embedding them into a larger system can be difficult, due to their size and power requirements.  Modern analog integrated circuit technology makes available to the instrument designer a vast array of building blocks, many of them programmable, to help build a sophisticated instrument with the minimum of components. The addition of a microcontroller or other embedded computer enables the designer to add extra features and produce a fully-featured, flexible instrument which is easy to use.
+
+The instrument presented here is based on a Raspberry Pi, the official Pi 7” LCD screen and case, and a DDS function generator ‘HAT’ of the author’s own design, 
+
+@KT:The Specification:
+0.01 Hz - 10MHz, adjustable in 0.01 Hz steps
+Sine, square, triangle outputs
+Output 50 ohm or low impedance with jumper option
+Output adjustable from +/-1mV to +/-5V pk-pk
+TTL sync output
+9th order filter for sine purity
+Uses Linux drivers or accessible via SPI bus
+Current limit warning LED
+Onboard supplies for analogue section
+SMA output connector
+
+@L:
+@ZT:The hardware
+Practically all modern signal or function generators are implemented using DDS (direct digital synthesis - see callout), and as DDS chips are freely available for a few pounds, it is possible to build an instrument with similar performance, and greater flexibility, for a few tens of pounds.  The maximum output frequency is limited by the semiconductor technology used to build the chip, and the master or ‘clock’ frequency (usually derived from a crystal oscillator) used to drive the chip. As the generation is purely digital, there is no lower bound to frequencies that can be produced. The author has chosen a DDS chip from Analog Devices, the AD9833BRMZ (ref 1), which has a range up to 12.5MHz. As a side benefit, this chip can also produce triangular and square wave outputs,  
+
+A useful generator must also have a means to adjust output amplitude. There are many ways to achieve  amplitude control, from simple, mechanical variable potentiometers (or ‘pots’), to their semiconductor equivalents. Many of these approaches have limitations due to excessive stray capacitance, linearity, stability and the ability to control from software. An optimum solution is to use a multiplying DAC - a digital to analog converter where the reference signal is replaced by the signal to be controlled. These so-called multiplying DACs are available and can control amplitudes of frequencies into the tens of MHz and beyond. The AD5443YRMZ (ref 2) from Analog Devices is such a chip, providing 10 bit resolution of amplitude control.
+
+Both of the chips selected have SPI interfaces, so are ideal for interfacing to the Raspberry Pi. In addition, both are supported by Analog Devices’ Linux Industrial I/O (ref 3) subsystem drivers. More about this later. 
+
+Because of the step-wise approximation to the ideal sine wave output, the generated signal must be filtered. The filter chosen for this design is a 9th order  elliptic low pass filter. Filters of this sort are a complex topic beyond the scope of this article, but there is a detailed explanation in the references (ref 6). A passive filter consists only of resistors, capacitors and inductors, and there are many online design resources, such as he one provided by RF Tools.com (ref 7). This deceptively simple tool allows the user to dial in the required parameter, and provides a schematic of the filter, the component values and a graphical phase and frequency response. The filter for the current design has a corner  cut-off frequency of around 12.5MHz, or half of the chosen crystal drive frequency of 25MHz. This filter is an anti-alias filter and by attenuating the higher frequencies (greater than the Nyquist frequency), it prevents the aliased components from being output. 
+
+To produce a useful output that can be used the drive other instruments at useful power levels, a wideband power amplifier is employed. The OPA564AIDWP from Texas Instruments (ref 4) provides an output of +/- 10V pk-pk at over 1A across the 10MHz frequency range, so is ideal for this application. It has built in over-current protection and a thermal shutdown mode, so it is immune to the type of abuse that a bench instrument may encounter.
+
+The remaining components that make up a practical design are connectors, op-amps for level shifting and buffering, potentiometers for calibration, and power supplies and filtering. The block diagram shows how the essential elements are connected to form the complete instrument.
+
+@ZT:DDS function generator block diagram
+@Bi:block_diagram.png
+
+The excellent open-source schematic capture and PCB design tool KiCad (ref 8) (available for Linux, of course) was used to capture the design and layout of the 2-layer PCB. The schematic is a complete implementation of a practical DDS function generator, with power supplies, filtering, a synchronization output, level shifters between stages and calibration potentiometers to set null our output offset in the power amplifier and to set the full scale gain to the value indicted in the GUI.
+The schematic is presented in full here, along with a 3D render provided by KiCAD, of the fully laid out PCB. The author has found the 3D models provided by KiCAD to be invaluable, allowing designs to be incorporated into larger mechanical models to ensure mechanical position of connectors etc. is correct, and that no component fouls any nearby mechanical element, such as features of an enclosure.
+Mounted on a Raspberry Pi, the DDS board fits within the official 7” Raspberry Pi display case (ref 9). A small modification to the case is required to allow the output connector to protrude through the case wall. Two vertical saw cuts down towards the HDMI connector remove a small rectangle of plastic. This does not in any was effect the structural integrity of the case.
+<I>A word about power supplies<I>
+The power supply used to power the instrument must be of sufficient capacity to supply both the PI and the DDS board. The official universal supply is recommended. (ref 10)
+
+@ZT:The schematic
+@Bi:dds_schematic.pdf
+
+@ZT:A 3D rendering of the PCB layout, from KiCAD
+@Bi:dds_render
+
+@KZ: The board installed in the Raspberry Pi case. Note the modification to the case to allow the connector to protrude
+@Bi:dds_installed
+
+@ZT:The software
+Today's instruments have generally moved away from front panels loaded with knobs and switches, to a more generic user interface with an LED or LCD screen, and possibly a single multi-function control knob. The interface designed for the current instrument is intended to run on the Raspberry Pi standard 7” touch LCD (ref 11), and so the user interface will be entirely touch-based, allowing a compact instrument to be built into the standard case. The whole setup is packaged as an instrument, with a Python-based GUI allowing full control of frequency, amplitude and waveshape that you would expect from a commercial instrument.
+As already stated, many instruments us a multi-purpose spinner, or control dial to change operating parameters, these parameters being displayed on an LED or LCD screen. The current GUI uses the same paradigm, with a circular GUI dial that controls frequency and amplitude. Two buttons associated with the dial select the decade currently being edited, and another two allow jog up/down for precise control. The frequency of voltage being edited is displayed in the central area of the screen, with the voltage displayed below. A series of buttons  selects the function of the dial, and other buttons control output waveform and frequency range. 
+The iio subsystem drivers hide the details of the SPI interface that are used to communicate with the DDS and DAC chips. The parameters that can be varied, such as  frequency, level and waveshape appear as files in the /sys tree. Simply writing valid values to those files causes SPI messages to be sent to the chip*. The iio driver takes care of scaling and all the low level communication details. The make interfacing to the chip from a high level language such as Python extremely convenient. The core methods required to communicate with the DDS board are contained in the file iio.py, listed below. The other files are all concerned with producing a convenient GUI to control the instrument.
+
+*It would of course be possible to bypass the iio drivers (i.e. not load them at all), and generate SPI messages directly. This however requires a detailed understanding of the SPI protocol used by each chip and in the author’s opinion is a lot of hard work for no appreciable gain.
+
+@ZT: The resulting GUI
+@Bi:dds_gui.png
+
+@TT: functions of the various GUI elements 
+@TL:Position		Function
+@TL:Top left:		range selection
+@TL:Top centre:		Frequency output indicator with cursor and units
+@TL:Top right:		<> : select decade (notice the cursor under the ‘1’ character)
+@TL:	           	+/- : jog up or down by 1 character
+@TL:				dial scrolls up or down in frequency. If the user scrolls past 9, the cursor moves to the left	and increment continues
+@TL:Bottom left:	waveform selection
+@TL:Bottom centre:	Voltage output indicator with cursor and units
+@TL:Bottom right:	Selector for dial function
+
+The files that make up this GUI are listed on the following pages.
+
+(note to editor: the first file is the only one that is essential to the understanding of the system. The remainder all compose the GUI elements. If required the others may be omitted for the sake of brevity & provided via FTP for completeness)
+
+The iio.py file provides routines to control the hardware via the iio device drivers, ad their entries in the /sys tree
+This is the least amount of code required to control the generator all the other files simply provide a GUI front end If you want to design your own GUI, or embed the generator in another system, this is all you need.
+@KT:Listing 1: iio.py
+@LI:
+
+The dds_gui.py program for the function generator uses the tkinter GUI toolkit (ref 12). Most of this file is about setting up the GUI elements and wiring the button events etc. to the appropriate routines. At the end, the program sets the instrument into its default state, enters the main loop and waits for user input.
+@KT:Listing 2: dds_gui.py
+@LI:
+
+The vlab.py and flab.py routines extend the capabilities of a TKinter Label and add editing facilities (for voltage and frequency respectively), enabling a cursor to be moved from digit to digit, and for that digit to be incremented and decremented 
+@KT:Listing 3: vlab.py
+@LI:
+
+@KT:Listing 4: flab.py
+@LI:
+
+The dial.py routines implement a custom TKInter widget that simulates a dial or spin knob often found on these types of instrument. There are buttons to jog up and down by a single digit, and to move up and down by a decade. These work closely with the frequency and voltage labels.
+@KT:Listing 5: dial.py
+@LI:
+
+(@ZT:)
+The Linux setup
+The author uses arch Linux for these type of Rasperry Pi, thought the following procedure should work on any modern Linux distro. A full, bootable SD card image of the instrument's OS and all the source code will be provided at (ref 12). 
+In order to access the DAC and DDS chips, some device drivers must be loaded. In turn those device drivers must be given information on the location and capabilities of these chips. These types of devices do not support auto-discovery, and so in the world of embedded ARM processors (and increasingly elsewhere) something called the device tree is used to locate and load suitable drivers for devices. If you have used any Raspberry PI HATS before, you may be familiar with adding overlays in config.txt.
+In the present case one overlay file, called dds_hat.dtbo is copied to the /boot/overlays directory, and referenced from /boot/config.txt.
+@KT:Listing 6: config.txt
+@LI:
+
+The overlay file is in binary format, produced by compiling from a .dts file using the device tree compiler. This compiler is available with most ARM-based distros. As stated earlier, the overlay tells the kernel where to find a specific device (e.g. its SPI address), something about its configuration (clock frequency, for example), and which device driver to load. This information is passed to the device driver so that it make communicate it the device and set it up appropriately. It this was the overlay provides a description to the kernel of the device, and the environment in which it exists.
+
+@KT:Listing7: dds_hat.dts
+
+Once the drivers are loaded during boot-up, the appropriate entries should appear in the /sys file tree, and you will see those entries correspond to those used by the Python routines in iio.py
+
+listing the device tree for the DAC chip
+@KT:Listing8: dac_tree.txt
+@LI:
+
+listing the device tree for the DDS chip
+@KT:Listing9: dds_tree.txt
+@LI:
+
+In order to avoid having to run the dds_hat program as root, it is possible to add some udev rules so that non-sudo users can access the iio subsystem. These rules are quire broad, and this approach is not recommended on a multi-user server, but for an embedded device like this, it seems acceptable.
+@KT:Listing10: udev_rules.txt
+@LI:
+
+You should now be able to run the Python program and enjoy your instrument!
+
+@ZT:Conclusion
+The author hopes the instrument described here, and the details of how it was built, its function and how it works internally will prove of interest to readers. There is always scope for improvement, both in hardware and software. There are many other uses the dds HAT board could be put to, with different software. For example, it's possible to produce complex amplitude, phase and frequency modulation schemes, (there are some examples in the datasheets and associated application notes) and so it could be integrated into a communications system.   
+All the designs and code will be availabel at (ref 12)
+
+@KT:
+A brief explanation of the Linux Industrial I/O Subsystem
+The Linux industrial I/O system, or iio for short, is an attempt at a unified interface for device drivers for chips such as data converters, sensors and frequency sources. The wiki at (ref 4) gives an excellent in depth description. From the perspective of the current article, the main thing to note is that once loaded, a device driver for a particular device exposes readable and writable parameters as entries in the /sys tree in the file system. This allows user programs to example and modify the device's function using file semantics, with no low-level (I2C/SPI/serial etc.) programming required. High speed devices also support a streaming interface.
+
+@KT:
+A brief explanation of direct digital synthesis
+DDS, or direct digital synthesis is a well known technique for generating repetitive waveforms from a single, high frequency source such as a crystal oscillator. The concept is fairly simple: samples of the waveform required are stored in RAM or ROM (in the case of a sine wave, only a quarter of a full cycle need be stored, and the rest inferred by symmetry). A counter is then used to access the stored samples sequentially and the samples are passed to a DAC, which the outputs the desired waveform. By varying the frequency fed to the counter, the frequency of the output may be varied. The resulting waveform is a stepped approximation of the desired waveform, and an output filter is required to reconstruct the exact waveform. This filter is generally a high-order passive filter with a corner frequency set as half the reference clock frequency. (see also ref 5 & 6)
+
+@IT:References 
+@IL:
+
+1. DDS chip
+<U>https://www.analog.com/media/en/technical-documentation/data-sheets/ad9833.pdf<U>
+
+2. DAC chip
+<U>https://www.analog.com/media/en/technical-documentation/data-sheets/ad5426_5432_5443.pdf<U>
+
+3. Power amplifier
+<U>http://www.ti.com/lit/ds/sbos372e/sbos372e.pdf<U>
+
+4. Linux IIO system
+<U>https://wiki.analog.com/software/linux/docs/iio/iio<U>
+
+5. DDS tutorial
+<U>https://www.analog.com/media/en/training-seminars/tutorials/MT-085.pdf<U>
+
+6. Elliptic filters
+<U>https://en.wikipedia.org/wiki/Elliptic_filter<U>
+
+7. Filter design
+<U>https://rf-tools.com/lc-filter/<U>
+
+8. KiCAD Cross-platform and open source electronics design automation suite
+<U>http://kicad-pcb.org/<U>
+
+9. Official 7” Raspberry Pi + display case
+<U>https://thepihut.com/products/raspberry-pi-official-7-touchscreen-case?variant=15155531396<U>
+
+10.  Raspberry Pi universal power supply
+<U>https://www.raspberrypi.org/products/raspberry-pi-universal-power-supply/<U>
+
+11. Raspberry Pi 7” display
+<U>https://www.raspberrypi.org/products/raspberry-pi-touch-display/<U>
+
+12: Author's github project page 
+<U>https://github.com/andrewrussellmalcolm/dds_hat<U>
+
+13: TKinter for python reference
+<U>http://infohost.nmt.edu/tcc/help/pubs/tkinter/web/index.html<u>
+
+14: The device tree compiler reference
+<U> https://elinux.org/Device_Tree_Reference<U>
+
+(@IT:) 
+Andrew Malcolm (MIEE, Ceng.) works as a software engineer in the energy sector by day, and in the evenings and weekends likes to combine software engineering with his first love, hardware engineering.  With all the  opensource tools available, he is never short of things to design. The Raspberry PI has proved a source of inspiration and to date Andrew has designed 5 different add-ons, or HATs. He is currently working on mirco-stepping motor drives for a Pi-based laser cutting machine. He can contacted on andrewrussellmalcolm@gmail.com
+
+
+

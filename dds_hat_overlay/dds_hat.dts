@@ -1,0 +1,107 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "brcm,bcm2708";
+
+	fragment@0 {
+        target = <&spidev0>;
+
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+
+	fragment@1 {
+        target = <&spidev1>;
+
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+
+    fragment@2 {
+	target = <&gpio>;
+    	__overlay__ {
+        	clock_pin: clock_pin {
+            	brcm,pins = <4>;     /* GPIO4 */
+                brcm,function = <4>; /* clock */
+                brcm,pull = <1>;
+            };
+        };
+    };
+
+	fragment@3 {
+        target = <&soc>;
+        __overlay__ {
+			avdd: fixedregulator@0 {
+				compatible = "regulator-fixed";
+				regulator-name = "fixed-supply";
+				regulator-min-microvolt = <5000000>;
+				regulator-max-microvolt = <5000000>;
+				regulator-always-on;
+			};
+		};
+	};
+
+	fragment@4 {
+        target = <&soc>;
+        __overlay__ {
+			vref: fixedregulator@0 {
+				compatible = "regulator-fixed";
+				regulator-name = "fixed-supply";
+				regulator-min-microvolt = <5000000>;
+				regulator-max-microvolt = <5000000>;
+				regulator-always-on;
+			};
+		};
+	};
+
+	// DDS
+	fragment@5 {
+		target = <&spi0>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "okay";
+
+		ad9833@0 {
+			compatible = "ad9833";
+			reg = <0>;
+			#io-channel-cells = <1>;
+			avdd-supply = <&avdd>; 
+			spi-max-frequency = <20000000>;
+			spi-cpol;
+            pinctrl-names = "default";
+            pinctrl-0 = <&clock_pin>;
+
+            clock-names = "mclk";
+
+            clocks = <&clocks 38>; /* BCM2835_CLOCK_GP0 */
+            assigned-clocks = <&clocks 38>;
+
+            assigned-clock-rates = <20000000>;
+			};
+		};
+	};
+
+	// DAC
+	fragment@6 {
+		target = <&spi0>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "okay";
+
+		ads5443@1 {
+			compatible = "ad5443";
+			reg = <1>;
+			#io-channel-cells = <1>;
+			VREF-supply = <&vref>; 
+			spi-max-frequency = <20000000>;
+			spi-cpol;
+			};
+		};
+	};
+};
+

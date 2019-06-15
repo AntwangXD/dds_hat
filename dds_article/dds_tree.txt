@@ -1,0 +1,12 @@
+$ ls -1 /sys/bus/iio/devices/iio\:device1/out*
+/sys/bus/iio/devices/iio:device1/out_altvoltage0_frequency0
+/sys/bus/iio/devices/iio:device1/out_altvoltage0_frequency1
+/sys/bus/iio/devices/iio:device1/out_altvoltage0_frequency_scale
+/sys/bus/iio/devices/iio:device1/out_altvoltage0_frequencysymbol
+/sys/bus/iio/devices/iio:device1/out_altvoltage0_out0_wavetype
+/sys/bus/iio/devices/iio:device1/out_altvoltage0_out0_wavetype_available
+/sys/bus/iio/devices/iio:device1/out_altvoltage0_out_enable
+/sys/bus/iio/devices/iio:device1/out_altvoltage0_phase0
+/sys/bus/iio/devices/iio:device1/out_altvoltage0_phase1
+/sys/bus/iio/devices/iio:device1/out_altvoltage0_phase_scale
+/sys/bus/iio/devices/iio:device1/out_altvoltage0_phasesymbol
