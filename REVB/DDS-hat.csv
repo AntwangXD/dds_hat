@@ -1,5 +1,5 @@
 Id,"Designator","Package","Quantity","Designation","Supplier and ref",													
-1,"J2	J5	J6","PinHeader_1x02_P1.27mm_Vertical",3,"Conn_01x02",,,											
+1,"J2	J5	J6","PinHeader_1x02_P1.27mm_Vertical",3,"Conn_01x02",,									
 2,"U4","Converter_DCDC_muRata_NMAxxxxDC_THT",1,"NMA0505DC",,,													
 3,"C31	C30	C29	C19	C10	C4	C5	C7	C8	C9	C11	C18	C6	C1","C_0603_1608Metric",14,"100n",,,
 4,"J3","SMA_EdgeMount",1,"Cinch 142-0701-801",,,													
